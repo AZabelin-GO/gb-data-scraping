@@ -1,6 +1,7 @@
 2. Изучить список открытых API (https://www.programmableweb.com/category/all/apis). Найти среди них любое, требующее
 авторизацию (любого типа). Выполнить запросы к нему, пройдя авторизацию. Ответ сервера записать в файл.
 
+# Positive use-case
 curl --location --request GET 'https://api.nasa.gov/planetary/apod?api_key=<PERSONAL_SECRET_API_KEY>'
 
 Authentication by http query parameter 'api_key=<PERSONAL_SECRET_API_KEY>'
@@ -16,3 +17,12 @@ Authentication by http query parameter 'api_key=<PERSONAL_SECRET_API_KEY>'
     "url": "https://apod.nasa.gov/apod/image/2110/Bat6995_Trottier_960.jpg"
 }
 
+# Negative use-case
+curl --location --request GET 'https://api.nasa.gov/planetary/apod'
+
+{
+  "error": {
+    "code": "API_KEY_MISSING",
+    "message": "No api_key was supplied. Get one at https://api.nasa.gov:443"
+  }
+}

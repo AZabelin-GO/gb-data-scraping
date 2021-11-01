@@ -29,7 +29,7 @@ def parse_hh(job_name, pages_count=1):
     result = []
 
     for i in range(pages_count):
-        search_url = f'https://hh.ru/search/vacancy?text={job_name}&page={i}'
+        search_url = f'https://novosibirsk.hh.ru/search/vacancy?text={job_name}&page={i}'
         response = requests.get(search_url, headers=headers)
         if response.ok:
             soup = bs(response.content, 'html.parser')
@@ -42,12 +42,17 @@ def parse_hh(job_name, pages_count=1):
                 if tmp:
                     salaries = [int(x) for x in re.findall(r'[0-9]+', ("".join(tmp.getText().split())))]
                     currency = tmp.getText().split()[-1]
+
                     if len(salaries) > 1:
                         job_salary_min = salaries[0]
                         job_salary_max = salaries[1]
                     else:
-                        job_salary_min = salaries[0]
-                        job_salary_max = None
+                        if tmp.getText().startswith('от'):
+                            job_salary_min = salaries[0]
+                            job_salary_max = None
+                        else:
+                            job_salary_min = None
+                            job_salary_max = salaries[0]
                 result.append({
                     'job_name': job_name,
                     'job_link': job_link,

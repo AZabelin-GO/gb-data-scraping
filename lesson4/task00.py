@@ -73,7 +73,8 @@ def upload_data_to_mongodb(data):
     table.create_index([("title", ASCENDING), ("source", ASCENDING)], unique=True)
 
     try:
-        table.insert_many(data, ordered=False)
+        if len(data) > 0:
+            table.insert_many(data, ordered=False)
     except mdb_errors.BulkWriteError as e:
         pprint(e.details['writeErrors'])
 
